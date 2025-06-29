@@ -105,6 +105,13 @@ Teknologi ini ringan, cepat dikembangkan, tidak memerlukan backend, serta cocok 
 
 ---
 
+## 🔗 Live Demo
+
+- 🌐 [Lihat versi live di Vercel](https://smarttodolist.vercel.app/)
+- 💻 [GitHub Pages](https://antsig.github.io/SmartToDoList-IBMGranite/)
+
+---
+
 ## 📸 Screenshots
 ![alt text](image.png)
 ![alt text](image-1.png)
@@ -113,13 +120,5 @@ Teknologi ini ringan, cepat dikembangkan, tidak memerlukan backend, serta cocok 
 
 ---
 
-## 🔗 Live Demo
-
-- 🌐 [Lihat versi live di Vercel](https://smarttodolist.vercel.app/)
-- 💻 [GitHub Pages](https://antsig.github.io/SmartToDoList-IBMGranite/)
-
----
-
-Made with 💙 for the Student Development Initiative  
-by **Hacktiv8 x IBM SkillsBuild**  
+Made with 💙 by Undermedia for the Student Development Initiative - **Hacktiv8 x IBM SkillsBuild**  
 #Hacktiv8 #IBMSkillsBuild #IBMGranite #VanillaJS #ToDoApp #TailwindCSS #AIEnhancedDev 
