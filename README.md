@@ -106,9 +106,7 @@ Teknologi ini ringan, cepat dikembangkan, tidak memerlukan backend, serta cocok 
 ---
 
 ## 📸 Screenshots
-- 📋 Form input & tanggal deadline  
 ![alt text](image.png)
-- ✅ Tugas selesai & auto-cross 
 ![alt text](image-1.png)
 ![alt text](image-2.png)
 ![alt text](image-3.png)
