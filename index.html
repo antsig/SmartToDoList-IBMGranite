@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart To-Do List</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-4 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">Smart To-Do List</h1>
+  </header>
+
+  <!-- Main Content -->
+  <main class="p-4 flex-grow">
+    <!-- Form -->
+    <form id="taskForm" class="space-y-4">
+      <input id="newTaskInput" type="text" placeholder="Add a new task..." class="w-full p-2 border rounded" />
+      <input id="deadlineInput" type="date" class="w-full p-2 border rounded" />
+      <button type="submit" class="w-full p-2 bg-blue-500 text-white rounded">Add</button>
+    </form>
+
+    <!-- Filter Buttons -->
+    <div class="flex space-x-4 mt-4">
+      <button id="filterAll" class="filter-btn px-4 py-2 bg-blue-500 text-white rounded">All</button>
+      <button id="filterActive" class="filter-btn px-4 py-2 bg-gray-300 rounded">Active</button>
+      <button id="filterCompleted" class="filter-btn px-4 py-2 bg-gray-300 rounded">Completed</button>
+    </div>
+
+    <!-- Task List -->
+    <ul id="taskList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6"></ul>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="text-center text-gray-500 mt-6 hidden">
+      No tasks yet. Add one above!
+    </div>
+  </main>
+
+  <!-- Script -->
+  <script>
+    const taskForm = document.getElementById('taskForm');
+    const taskInput = document.getElementById('newTaskInput');
+    const deadlineInput = document.getElementById('deadlineInput');
+    const taskList = document.getElementById('taskList');
+    const emptyState = document.getElementById('emptyState');
+
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let currentFilter = 'all';
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+
+      let today = new Date().toISOString().split('T')[0];
+      tasks.forEach(task => {
+        if (task.deadline && task.deadline < today && !task.completed) {
+          task.completed = true; // auto-mark as completed
+        }
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+
+      let filteredTasks = tasks;
+      if (currentFilter === 'active') {
+        filteredTasks = tasks.filter(task => !task.completed);
+      } else if (currentFilter === 'completed') {
+        filteredTasks = tasks.filter(task => task.completed);
+      }
+
+      if (filteredTasks.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      filteredTasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = `flex flex-col bg-white shadow p-4 rounded ${task.completed ? 'opacity-70' : ''}`;
+        li.dataset.index = index;
+
+        const topRow = document.createElement('div');
+        topRow.className = 'flex items-center justify-between w-full';
+
+        const content = document.createElement('div');
+        content.className = 'flex items-center flex-1';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+        checkbox.className = 'mr-2';
+        checkbox.addEventListener('change', () => updateTask(checkbox, index));
+
+        const textSpan = document.createElement('span');
+        textSpan.textContent = task.text;
+        textSpan.className = 'truncate';
+        if (task.completed) {
+          textSpan.classList.add('line-through', 'text-gray-500');
+        }
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'text-blue-500 hover:underline ml-4';
+        editBtn.addEventListener('click', () => startEdit(textSpan, index));
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'text-red-500 hover:underline ml-2';
+        deleteBtn.addEventListener('click', () => deleteTask(index));
+
+        content.appendChild(checkbox);
+        content.appendChild(textSpan);
+        content.appendChild(editBtn);
+
+        topRow.appendChild(content);
+        topRow.appendChild(deleteBtn);
+        li.appendChild(topRow);
+
+        if (task.deadline) {
+          const deadlineEl = document.createElement('div');
+          deadlineEl.className = 'text-sm text-gray-500 mt-2';
+          deadlineEl.textContent = `Deadline: ${task.deadline}`;
+          li.appendChild(deadlineEl);
+        }
+
+        taskList.appendChild(li);
+      });
+    }
+
+    function updateTask(checkbox, index) {
+      tasks[index].completed = checkbox.checked;
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function addTask(text, deadline) {
+      tasks.push({ text, deadline, completed: false });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function startEdit(span, index) {
+      const oldText = tasks[index].text;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = oldText;
+      input.className = 'p-1 border rounded w-full';
+      span.replaceWith(input);
+      input.focus();
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          commitEdit(input, index);
+        } else if (e.key === 'Escape') {
+          cancelEdit(input, oldText);
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        commitEdit(input, index);
+      });
+    }
+
+    function commitEdit(input, index) {
+      const newValue = input.value.trim();
+      if (newValue && newValue !== tasks[index].text) {
+        tasks[index].text = newValue;
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      }
+      renderTasks();
+    }
+
+    function cancelEdit(input, originalText) {
+      const span = document.createElement('span');
+      span.textContent = originalText;
+      span.className = 'truncate';
+      input.replaceWith(span);
+    }
+
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const taskText = taskInput.value.trim();
+      const deadline = deadlineInput.value;
+      if (taskText) {
+        addTask(taskText, deadline);
+        taskInput.value = '';
+        deadlineInput.value = '';
+      }
+    });
+
+    document.getElementById('filterAll').addEventListener('click', () => setFilter('all'));
+    document.getElementById('filterActive').addEventListener('click', () => setFilter('active'));
+    document.getElementById('filterCompleted').addEventListener('click', () => setFilter('completed'));
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-300');
+      });
+
+      const activeBtn = document.getElementById(`filter${capitalize(filter)}`);
+      activeBtn.classList.remove('bg-gray-300');
+      activeBtn.classList.add('bg-blue-500', 'text-white');
+
+      renderTasks();
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    renderTasks();
+  </script>
+</body>
+</html>
