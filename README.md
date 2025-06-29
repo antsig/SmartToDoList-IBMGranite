@@ -116,7 +116,7 @@ Teknologi ini ringan, cepat dikembangkan, tidak memerlukan backend, serta cocok 
 ## 🔗 Live Demo
 
 - 🌐 [Lihat versi live di Vercel](https://smarttodolist.vercel.app/)
-- 💻 [GitHub Repository](https://github.com/antsig/SmartToDoList-IBMGranite.git)
+- 💻 [GitHub Pages](https://antsig.github.io/SmartToDoList-IBMGranite/)
 
 ---
 
