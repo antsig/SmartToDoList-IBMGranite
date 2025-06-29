@@ -49,6 +49,37 @@ Teknologi ini ringan, cepat dikembangkan, tidak memerlukan backend, serta cocok 
 
 ---
 
+## 🧭 Cara Mengoperasikan Aplikasi
+
+### 1. Menambahkan Tugas Baru
+- Ketik deskripsi tugas di kolom "Add a new task..."
+- (Opsional) Pilih tanggal deadline
+- Klik tombol "Add"
+- Tugas akan muncul di daftar
+
+### 2. Menandai Tugas Selesai
+- Klik checkbox di samping tugas
+- Tugas akan diberi efek coretan dan dianggap selesai
+
+### 3. Mengedit Tugas
+- Klik langsung pada teks tugas
+- Teks menjadi editable, tekan Enter untuk menyimpan
+
+### 4. Menghapus Tugas
+- Klik tombol “Delete” di samping tugas
+- Tugas akan langsung dihapus
+
+### 5. Filter Tugas (All / Active / Completed)
+- Klik tombol filter untuk mengubah tampilan tugas
+
+### 6. Deadline
+- Tugas yang melewati deadline dan belum ditandai selesai akan otomatis dicoret
+
+### 7. Penyimpanan Otomatis
+- Semua data disimpan dengan localStorage tanpa login
+
+---
+
 ## 🚀 Setup Instructions
 
 1. **Clone repo** atau **unduh `index.html`**
@@ -75,19 +106,19 @@ Teknologi ini ringan, cepat dikembangkan, tidak memerlukan backend, serta cocok 
 ---
 
 ## 📸 Screenshots
-
-*(Tambahkan tangkapan layar hasil aplikasi di sini)*  
 - 📋 Form input & tanggal deadline  
-- ✅ Tugas selesai & auto-cross  
-- 🔄 Filter tampilan tugas  
-- 📱 Responsif di mobile
+![alt text](1.png)
+- ✅ Tugas selesai & auto-cross 
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
 
 ---
 
 ## 🔗 Live Demo
 
-- 🌐 [Lihat versi live di Netlify](https://smart-todo-demo.netlify.app) *(ganti dengan link asli)*
-- 💻 [GitHub Repository](https://github.com/antsig/smart-to-do) *(ganti dengan link asli)*
+- 🌐 [Lihat versi live di Vercel](https://smarttodolist.vercel.app/)
+- 💻 [GitHub Repository](https://github.com/antsig/SmartToDoList-IBMGranite.git)
 
 ---
 
